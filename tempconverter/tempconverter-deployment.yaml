@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tempconverter
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: tempconverter
+  template:
+    metadata:
+      labels:
+        app: tempconverter
+    spec:
+      containers:
+        - name: tempconverter
+          image: igrgin/tempconverter:latest
+          env:
+            - name: DB_USER
+              value: tempuser
+            - name: DB_PASS
+              value: temppass
+            - name: DB_HOST
+              value: mysql
+            - name: DB_NAME
+              value: tempconverter
+            - name: STUDENT
+              value: "Ivo Grgin"
+            - name: COLLEGE
+              value: "Algebra University"
+          ports:
+            - containerPort: 5000

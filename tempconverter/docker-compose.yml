@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: tempconverter
+      MYSQL_USER: tempuser
+      MYSQL_PASSWORD: temppass
+    networks:
+      - tempconverter-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+
+  app:
+    image: docker.io/igrgin/tempconverter:latest
+    environment:
+      DB_USER: tempuser
+      DB_PASS: temppass
+      DB_HOST: db
+      DB_NAME: tempconverter
+      STUDENT: "Ivo Grgin"
+      COLLEGE: "Algebra University"
+    ports:
+      - "80:5000"
+    networks:
+      - tempconverter-net
+    deploy:
+      replicas: 2
+
+networks:
+  tempconverter-net:
+    driver: overlay
